@@ -19,8 +19,12 @@ public class Bloco {
     private Font fonte;
     private int x;
     private int y;
+    private Point Goto;
+    
+    private boolean juntarB;
     
     public Bloco(int valor_blocos,int x,int y){
+        this.valor_blocos = valor_blocos;
         this.x = x;
         this.y = y;
         blocos = new BufferedImage(LARG, ALT, BufferedImage.TYPE_INT_ARGB);
@@ -81,7 +85,7 @@ public class Bloco {
       g.fillRect(0,0,LARG,ALT);
       
       g.setColor(fundo);
-      g.fillRoundRect(0,0,LARG,ALT,ARC_LARG,ARC_LARG);
+      g.fillRoundRect(0,0,LARG,ALT,ARC_LARG,ARC_ALT);
       
       g.setColor(string);
       
@@ -98,4 +102,39 @@ public class Bloco {
     g.drawString(""+valor_blocos,blocoX,blocoY);
     g.dispose();
     }
+    
+    public void update(){
+        
+    }
+    public void render(Graphics2D g){
+        g.drawImage(blocos,x,y,null);
+        
+    }
+    
+    public int getValor_blocos(){
+        return valor_blocos;
+    } 
+
+    public void setValor_blocos(int valor_blocos) {
+        this.valor_blocos = valor_blocos;
+    }
+    
+    public boolean juntarB() {
+        return juntarB;
+    }
+
+    public Point getGoto() {
+        return Goto;
+    }
+
+    public void setGoto(Point Goto) {
+        this.Goto = Goto;
+    }
+    
+    public void setJuntarB(boolean juntarB) {
+        this.juntarB = juntarB;
+    }
+  
+
+
 }

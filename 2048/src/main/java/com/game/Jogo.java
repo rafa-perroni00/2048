@@ -3,7 +3,6 @@ package com.game;
 
 
 import java.awt.Color;
-import static java.awt.Color.white;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -17,27 +16,34 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
     private static final long serialVersionUID = 1L;
     public static int LARG = 400;
     public static int ALT = 630;
-    public static final Font main = new Font("Verdana",Font.PLAIN,32);
+    public static final Font main = new Font("Bebas Neue Regular",Font.PLAIN,28);
     private Thread jogo;
     private boolean jogo_Rodando;
     private BufferedImage Tela = new BufferedImage(LARG,ALT,BufferedImage.TYPE_INT_RGB);
     private long startTime;
     private long elapsed;
     private boolean set1;
+    private Board back;
+    
     
     public Jogo(){
     setFocusable(true);
     setPreferredSize(new Dimension(LARG,ALT));
     addKeyListener(this);
+    
+    back = new Board(LARG/2 - Board.BOARD_LARG/2,ALT - Board.BOARD_ALT - 100);
     }
     
     private void update(){
+        back.update();
+        Controle.update();
         
     }
     private void render(){//Criar o Tabuleiro
         Graphics2D g = (Graphics2D)Tela.getGraphics();
         g.setColor(Color.white);
         g.fillRect(0, 0, LARG, ALT);
+        back.render(g);
         g.dispose();
         Graphics2D g2d = (Graphics2D)getGraphics();
         g2d.drawImage(Tela,0,0,null);
@@ -108,15 +114,15 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
     
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        Controle.keyPressed(e);
     }
     @Override
     public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        Controle.keyReleased(e);
     }
 }
