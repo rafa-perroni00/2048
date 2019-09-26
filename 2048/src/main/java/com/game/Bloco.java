@@ -34,53 +34,69 @@ public class Bloco {
     
     private void printaBloco(){
       Graphics2D g = (Graphics2D)blocos.getGraphics();
-      if(valor_blocos == 2){
+      
+      switch(valor_blocos){
+          case 2:{
           fundo = new Color(233,233,233);
           string = new Color(0,0,0);
-      }
-      else if(valor_blocos == 4){
-        fundo = new Color(230,218,171);
-        string = new Color(0,0,0);
-    }
-      else if(valor_blocos == 8){
-        fundo = new Color(247,157,61);
-        string = new Color(255,255,255);      
-    }
-      else if(valor_blocos == 16){
-        fundo = new Color(242,128,7);
-        string = new Color(255,255,255); 
-    }
-      else if(valor_blocos == 32){
-        fundo = new Color(245,94,59);
-        string = new Color(255,255,255);
-    }
-      else if(valor_blocos == 64){
-        fundo = new Color(255,0,0);
-        string = new Color(255,255,255);      
-    }
-      else if(valor_blocos == 128){
-        fundo = new Color(233,222,132);
-        string = new Color(255,255,255); 
-    }
-      else if(valor_blocos == 256){
-        fundo = new Color(246,232,115);
-        string = new Color(255,255,255);
-    }
-      else if(valor_blocos == 512){
-        fundo = new Color(245,228,85);
-        string = new Color(255,255,255);      
-    }
-      else if(valor_blocos == 1024){
-        fundo = new Color(255,255,0);
-        string = new Color(255,255,255); 
-    }     
-      else if(valor_blocos == 2048){
-        fundo = new Color(0,255,0);
-        string = new Color(255,255,255); 
-    }
-      else{
+          break;
+          }
+      
+          case 4:{
+          fundo = new Color(230,218,171);
+          string = new Color(0,0,0);
+          break;
+          }
+          case 8:{
+          fundo = new Color(247,157,61);
+          string = new Color(255,255,255);
+          break;
+          }
+          case 16:{
+          fundo = new Color(242,128,7);
+          string = new Color(255,255,255); 
+          break;
+          }
+          case 32:{
+          fundo = new Color(245,94,59);
+          string = new Color(255,255,255);
+          break;
+          }
+          case 64:{
+          fundo = new Color(255,0,0);
+          string = new Color(255,255,255); 
+          break;
+          }
+          case 128:{
+          fundo = new Color(233,222,132);
+          string = new Color(255,255,255);
+          break;
+          }
+          case 256:{
+          fundo = new Color(246,232,115);
+          string = new Color(255,255,255);
+          break;
+          }
+          case 512:{
+          fundo = new Color(245,228,85);
+          string = new Color(255,255,255);
+          break;
+          }
+          case 1024:{
+          fundo = new Color(255,255,0);
+          string = new Color(255,255,255); 
+          break;
+          }     
+          case 2048:{
+          fundo = new Color(0,255,0);
+          string = new Color(255,255,255);
+          break;
+          }
+          default:{
           fundo = new Color(0,0,0);
           string = new Color(255,255,255);
+          break;
+          }
       }
       g.setColor(new Color(0,0,0,0));
       g.fillRect(0,0,LARG,ALT);
@@ -99,7 +115,7 @@ public class Bloco {
       g.setFont(fonte);
 
     int blocoX = LARG/2 - MetodosUteis.getMensagemBlocoLarg(""+valor_blocos, fonte, g)/2;
-    int blocoY = ALT/2 - MetodosUteis.getMensagemBlocoAlt(""+valor_blocos, fonte, g)/2;
+    int blocoY = ALT/2 + MetodosUteis.getMensagemBlocoAlt(""+valor_blocos, fonte, g)/2;
     g.drawString(""+valor_blocos,blocoX,blocoY);
     g.dispose();
     }
