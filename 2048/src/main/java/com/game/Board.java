@@ -106,13 +106,42 @@ public class Board {
                 Bloco gerado = board[line][col];
                   if(gerado == null)continue;
                   gerado.update();
-                  //reseta
+                  resetPosicoes(gerado,line,col);
                   if(gerado.getValor_blocos() == 2048){
                       winner = true;
                   }  
         }
     }
     }
+    
+    private void resetPosicoes(Bloco gerado,int line,int col){
+        if(gerado == null)return;
+            int x = getBlocoX(col);
+            int y = getBlocoY(line);
+            
+            int distX = gerado.getX() - x; // Pega X do bloco
+            int distY = gerado.getY() - y; // Pega Y do bloco
+            
+            if(Math.abs(distX) < Bloco.Slide){
+                gerado.setX(gerado.getX() - distX);//Tamanho do movimento do bloco em X
+            }
+            if(Math.abs(distY) < Bloco.Slide){
+                gerado.setY(gerado.getY() - distY);//Tamanho do movimento do bloco em Y
+            }            
+            
+            if(distX < 0){
+                gerado.setX(gerado.getX() + Bloco.Slide);
+            }
+            if(distY < 0){
+                gerado.setY(gerado.getY() + Bloco.Slide);
+            }
+            if(distX > 0){
+                gerado.setX(gerado.getX() + Bloco.Slide);
+            }
+            if(distY > 0){
+                gerado.setY(gerado.getY() + Bloco.Slide);
+            }            
+    }    
     
     private boolean move(int line,int col,int hozirontalD,int verticalD,Lados lado){
         boolean pMove = false;
@@ -129,7 +158,8 @@ public class Board {
             if(board[newLINE][newCOL] == null){//Se for null mexe os blocos e continua o loop
                board[newLINE][newCOL] = gerado;
                board[newLINE - verticalD][newCOL - hozirontalD] = null;
-               board[newLINE][newCOL].setGoto(new Point(newLINE,newCOL));    
+               board[newLINE][newCOL].setGoto(new Point(newLINE,newCOL));
+               pMove = true;
             }else if(board[newLINE][newCOL].getValor_blocos() == gerado.getValor_blocos() && board[newLINE][newCOL].juntarB()){//Se nao puder combinar mais
                 board[newLINE][newCOL].setJuntarB(false);
                 board[newLINE][newCOL].setValor_blocos(board[newLINE][newCOL].getValor_blocos()*2);
@@ -219,9 +249,45 @@ public class Board {
                 }        
         if(pMove){
             bRandom();
+            checaPerdeu();
             
         }    
         
+    }
+    private void checaPerdeu(){
+        for(int line = 0;line<LINE;line++){
+            for(int col = 0;col<COL;col++){
+                if(board[line][col] == null)return;
+                if(checaEmVolta(line,col,board[line][col])){
+                    return;
+                }  
+            }
+            }
+        lose = true;
+        //setHighScore(score);
+    }
+    private boolean checaEmVolta(int line,int col,Bloco gerado){
+        if(line > 0){//Checa para cima
+            Bloco aux = board[line - 1][col];
+            if(aux == null)return true;
+            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+        }
+        if(line < LINE - 1){//Checa para Baixo
+            Bloco aux = board[line + 1][col];
+            if(aux == null)return true;
+            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+        }
+        if(col > 0){//Checa para Esquerda
+            Bloco aux = board[line][col - 1];
+            if(aux == null)return true;
+            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+        }
+        if(col < COL - 1){//Checa para diretia
+            Bloco aux = board[line][col + 1];
+            if(aux == null)return true;
+            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+        }  
+        return false;
     }
     
     private void checkKeys(){

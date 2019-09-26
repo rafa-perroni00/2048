@@ -14,9 +14,9 @@ import java.awt.image.BufferedImage;
 public class Jogo extends JPanel implements KeyListener, Runnable{
     
     private static final long serialVersionUID = 1L;
-    public static int LARG = 400;
-    public static int ALT = 630;
-    public static final Font main = new Font("Bebas Neue Regular",Font.PLAIN,28);
+    public static int LARG = 500;
+    public static int ALT = 560;
+    public static final Font main = new Font("Arial",Font.PLAIN,28);
     private Thread jogo;
     private boolean jogo_Rodando;
     private BufferedImage Tela = new BufferedImage(LARG,ALT,BufferedImage.TYPE_INT_RGB);
@@ -31,7 +31,7 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
     setPreferredSize(new Dimension(LARG,ALT));
     addKeyListener(this);
     
-    back = new Board(LARG/2 - Board.BOARD_LARG/2,ALT - Board.BOARD_ALT - 100);
+    back = new Board(LARG/2 - Board.BOARD_LARG/2,ALT - Board.BOARD_ALT - 10);
     }
     
     private void update(){

@@ -6,9 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Bloco {
-    public static final int LARG = 80;
-    public static final int ALT = 80;
-    public static final int Slide = 15;
+    public static final int LARG = 100;
+    public static final int ALT = 100;
+    public static final int Slide = 30;
     public static final int ARC_LARG = 15;
     public static final int ARC_ALT = 15;
     
@@ -21,12 +21,13 @@ public class Bloco {
     private int y;
     private Point Goto;
     
-    private boolean juntarB;
+    private boolean juntarB = true; //Precisa comecar true para a primeira juncao
     
     public Bloco(int valor_blocos,int x,int y){
         this.valor_blocos = valor_blocos;
         this.x = x;
         this.y = y;
+        Goto = new Point(x,y);
         blocos = new BufferedImage(LARG, ALT, BufferedImage.TYPE_INT_ARGB);
         printaBloco();
     }
@@ -117,6 +118,7 @@ public class Bloco {
 
     public void setValor_blocos(int valor_blocos) {
         this.valor_blocos = valor_blocos;
+        printaBloco();//Redesenha tudo
     }
     
     public boolean juntarB() {
@@ -133,6 +135,22 @@ public class Bloco {
     
     public void setJuntarB(boolean juntarB) {
         this.juntarB = juntarB;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
   
 
