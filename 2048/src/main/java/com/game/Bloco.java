@@ -3,6 +3,8 @@ package com.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Bloco {
@@ -21,6 +23,13 @@ public class Bloco {
     private int y;
     private Point Goto;
     
+    private boolean sAnimacao = true;
+    private double tBloco = 0.1;
+    private BufferedImage sBloco;
+    private boolean jAnimacao = false;
+    private double tJuncao = 1.2;
+    private BufferedImage bJunto;
+    
     private boolean juntarB = true; //Precisa comecar true para a primeira juncao
     
     public Bloco(int valor_blocos,int x,int y){
@@ -29,6 +38,9 @@ public class Bloco {
         this.y = y;
         Goto = new Point(x,y);
         blocos = new BufferedImage(LARG, ALT, BufferedImage.TYPE_INT_ARGB);
+        sBloco = new BufferedImage(LARG,ALT,BufferedImage.TYPE_INT_ARGB);
+        bJunto = new BufferedImage(LARG*2,ALT*2,BufferedImage.TYPE_INT_ARGB);
+                
         printaBloco();
     }
     
@@ -120,11 +132,46 @@ public class Bloco {
     g.dispose();
     }
     
-    public void update(){
-        
+    public void update(){//Todas as animacoes
+        if(sAnimacao){
+            AffineTransform transforma = new AffineTransform();//Transformacao de escala
+            transforma.translate(LARG/2 - tBloco * LARG/2,ALT/2 - tBloco * ALT/2);
+            transforma.scale(tBloco, tBloco);
+            Graphics2D g2d = (Graphics2D)sBloco.getGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0,0,LARG,ALT);
+            g2d.drawImage(blocos,transforma,null);
+            tBloco += 0.1;
+            g2d.dispose();
+            if(tBloco>=1)
+                sAnimacao = false;
+        }else if(sAnimacao){
+            AffineTransform transforma = new AffineTransform();//Transformacao de escala
+            transforma.translate(LARG/2 - tJuncao * LARG/2,ALT/2 - tJuncao * ALT/2);
+            transforma.scale(tJuncao, tJuncao);
+            Graphics2D g2d = (Graphics2D)bJunto.getGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setColor(new Color(0,0,0,0));
+            g2d.fillRect(0,0,LARG,ALT);
+            g2d.drawImage(blocos, transforma, null);
+            tJuncao -= 0.05;
+            g2d.dispose();
+            if(tJuncao<=1)
+                jAnimacao = false;           
+            
+        }
     }
     public void render(Graphics2D g){
-        g.drawImage(blocos,x,y,null);
+        if(sAnimacao){
+            g.drawImage(sBloco,x,y,null);
+        }else if(jAnimacao){
+            g.drawImage(bJunto,(int)(x + LARG/2 - tJuncao*LARG/2),
+                               (int)(y + ALT/2 - tJuncao*ALT/2),null);
+        }
+        else{//Se nao tiver juncao
+            g.drawImage(blocos,x,y,null);
+        }
         
     }
     
@@ -167,6 +214,14 @@ public class Bloco {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public boolean isjAnimacao() {
+        return jAnimacao;
+    }
+
+    public void setjAnimacao(boolean jAnimacao) {
+        this.jAnimacao = jAnimacao;
     }
   
 

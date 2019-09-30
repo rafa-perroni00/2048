@@ -136,10 +136,10 @@ public class Board {
                 gerado.setY(gerado.getY() + Bloco.Slide);
             }
             if(distX > 0){
-                gerado.setX(gerado.getX() + Bloco.Slide);
+                gerado.setX(gerado.getX() - Bloco.Slide);
             }
             if(distY > 0){
-                gerado.setY(gerado.getY() + Bloco.Slide);
+                gerado.setY(gerado.getY() - Bloco.Slide);
             }            
     }    
     
@@ -166,7 +166,7 @@ public class Board {
                 pMove = true;
                 board[newLINE - verticalD][newCOL - hozirontalD] = null;
                 board[newLINE][newCOL].setGoto(new Point(newLINE,newCOL));
-             //   board[newLINE][newCOL].setAnimacao
+                board[newLINE][newCOL].setjAnimacao(true);//Chama animacao
             }
             else{
                 move = false;
