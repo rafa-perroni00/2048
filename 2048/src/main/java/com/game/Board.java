@@ -14,7 +14,9 @@ import java.io.InputStreamReader;
 import java.util.Random;
 
 
-public class Board {
+
+
+public class Board{
     public static final int LINE = 4;
     public static final int COL = 4;
     
@@ -30,6 +32,8 @@ public class Board {
     private int score = 0;
     private Font fScore;
     private int highScore = 0;
+    private Font fim;
+    private String r = "Aperte R para resete";
     
     //Arquivo do highscore
     private String saveHS;
@@ -46,7 +50,7 @@ public class Board {
         }catch(Exception e){
             e.printStackTrace();
         }
-        
+        fim = Jogo.main.deriveFont(70f);
         fScore = Jogo.main.deriveFont(24f);
         this.x = x;
         this.y = y;
@@ -57,7 +61,7 @@ public class Board {
         mostraHS();
         printBoard();
         start();
-        
+       
     }
     
     private void mostraHS(){//Verifica se Arquivo ja existe
@@ -166,6 +170,10 @@ public class Board {
         g.drawString("SCORE:"+ score,30,40);
         g.setColor(Color.MAGENTA);
         g.drawString("HIGHSCORE: "+highScore,Jogo.LARG - MetodosUteis.getMensagemBlocoLarg("HIGHSCORE:"+highScore,fScore,g)-20,40);
+        if(lose){
+            fimDeJogoP(g);
+            //reset();
+        }
     }
     
     public void update(){
@@ -181,6 +189,8 @@ public class Board {
                   resetPosicoes(gerado,line,col);
                   if(gerado.getValor_blocos() == 2048){
                       winner = true;
+                      System.out.println("Win");
+                      reset();
                   }  
         }
     }
@@ -194,6 +204,17 @@ public class Board {
 		hasStarted = false;
                 score = 0;
 	}
+    
+    	public void fimDeJogoP(Graphics2D g) {
+		g.setColor(new Color(222,222,222));
+		g.fillRect(0, 0, Jogo.WIDTH, Jogo.HEIGHT);
+		g.setColor(Color.BLACK);
+		g.drawString("Voce Perdeu!", Jogo.WIDTH / 2 - MetodosUteis.getMensagemBlocoLarg("Voce Perdeu!",fim, g)/2 + 250, 300);
+                g.setColor(Color.BLACK);
+                g.setColor(Color.BLACK);
+                g.setFont(fScore);
+                g.drawString(r,180,80);
+        }
     
     private void resetPosicoes(Bloco gerado,int line,int col){
         if(gerado == null)return;
@@ -347,6 +368,8 @@ public class Board {
             }
         lose = true;
         setHighScore();
+        //System.out.println("Voce Perdeu !!!");
+        
     }
     private boolean checaEmVolta(int line,int col,Bloco gerado){
         if(line > 0){//Checa para cima
