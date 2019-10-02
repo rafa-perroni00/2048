@@ -1,9 +1,16 @@
 package com.game;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 
@@ -11,6 +18,7 @@ public class Board {
     public static final int LINE = 4;
     public static final int COL = 4;
     
+    private Board back;
     private final int iBlocos = 2;
     private Bloco[][] board;
     private boolean lose;
@@ -19,23 +27,79 @@ public class Board {
     private BufferedImage endBoard;
     private int x;
     private int y;
+    private int score = 0;
+    private Font fScore;
+    private int highScore = 0;
     
+    //Arquivo do highscore
+    private String saveHS;
+    private String aName = "SaveHS";
+
     private boolean hasStarted;
     private static int pixel = 10;
     public static int BOARD_LARG = (COL + 1)*pixel+COL*Bloco.LARG;
     public static int BOARD_ALT = (LINE + 1)*pixel+LINE*Bloco.ALT;
     
     public Board(int x,int y){
+        try{
+            saveHS = Board.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();//Salvar o arquivo
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        fScore = Jogo.main.deriveFont(24f);
         this.x = x;
         this.y = y;
         board = new Bloco[LINE][COL];
         boardJ = new BufferedImage(BOARD_LARG,BOARD_ALT,BufferedImage.TYPE_INT_RGB);
         endBoard = new BufferedImage(BOARD_LARG,BOARD_ALT,BufferedImage.TYPE_INT_RGB);
         
+        mostraHS();
         printBoard();
         start();
         
     }
+    
+    private void mostraHS(){//Verifica se Arquivo ja existe
+       try{
+           File a = new File(saveHS,aName);
+           if(!a.isFile()){
+               initSaveHS();
+           }
+           BufferedReader load = new BufferedReader(new InputStreamReader(new FileInputStream(a)));
+           highScore = Integer.parseInt(load.readLine());//Le o HighScore
+       } 
+       catch(Exception e){
+           
+       }
+    }
+    private void setHighScore(){
+        FileWriter strWrite = null;
+        try{
+            File a = new File(saveHS,aName);
+            strWrite = new FileWriter(a);
+            BufferedWriter str = new BufferedWriter(strWrite);
+         
+              str.write("" + highScore);
+            
+            str.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void initSaveHS(){//Cria o arquivo para salvar o HighScore
+      try{
+          File arq = new File(saveHS,aName);
+          FileWriter strWrite = new FileWriter(arq);
+          BufferedWriter str = new BufferedWriter(strWrite);
+          str.write(""+0);
+      }  
+      catch(Exception e){
+          e.printStackTrace();
+      }
+    }
+    
     private void printBoard(){
         Graphics2D g = (Graphics2D)boardJ.getGraphics();
         g.setColor(Color.darkGray);
@@ -96,10 +160,18 @@ public class Board {
         }
         g.drawImage(endBoard,x,y,null);
         g2d.dispose();
+        
+        g.setColor(Color.BLACK);
+        g.setFont(fScore);
+        g.drawString("SCORE:"+ score,30,40);
+        g.setColor(Color.MAGENTA);
+        g.drawString("HIGHSCORE: "+highScore,Jogo.LARG - MetodosUteis.getMensagemBlocoLarg("HIGHSCORE:"+highScore,fScore,g)-20,40);
     }
     
     public void update(){
         checkKeys();
+        
+        if(score >= highScore) highScore = score;
         
         for(int line = 0;line<LINE;line++){
             for(int col = 0;col<COL;col++){
@@ -113,6 +185,15 @@ public class Board {
         }
     }
     }
+    
+    public void reset(){
+		board = new Bloco[LINE][COL];
+		start();
+		lose = false;
+		winner = false;
+		hasStarted = false;
+                score = 0;
+	}
     
     private void resetPosicoes(Bloco gerado,int line,int col){
         if(gerado == null)return;
@@ -167,6 +248,7 @@ public class Board {
                 board[newLINE - verticalD][newCOL - hozirontalD] = null;
                 board[newLINE][newCOL].setGoto(new Point(newLINE,newCOL));
                 board[newLINE][newCOL].setjAnimacao(true);//Chama animacao
+                score += board[newLINE][newCOL].getValor_blocos();
             }
             else{
                 move = false;
@@ -264,7 +346,7 @@ public class Board {
             }
             }
         lose = true;
-        //setHighScore(score);
+        setHighScore();
     }
     private boolean checaEmVolta(int line,int col,Bloco gerado){
         if(line > 0){//Checa para cima
@@ -288,6 +370,10 @@ public class Board {
             if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
         }  
         return false;
+    }
+    
+    private void iWin(int valor,int col,int line){
+        board[line][col] = new Bloco(valor,getBlocoX(col),getBlocoY(line));
     }
     
     private void checkKeys(){
@@ -323,6 +409,13 @@ public class Board {
             moveB(Lados.BAIXO);
             if(!hasStarted)hasStarted = true;
         }
-                               
+        if(Controle.digita(KeyEvent.VK_V)){
+            iWin(1024,0,0);
+            iWin(1024,0,1);
+        }
+        if(Controle.digita(KeyEvent.VK_R)){
+            reset();
+        }
+       
     }
 }

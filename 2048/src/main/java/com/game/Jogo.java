@@ -13,16 +13,13 @@ import java.awt.image.BufferedImage;
 
 public class Jogo extends JPanel implements KeyListener, Runnable{
     
-    private static final long serialVersionUID = 1L;
+    //private static final long serialVersionUID = 1L;
     public static int LARG = 500;
     public static int ALT = 560;
     public static final Font main = new Font("Arial",Font.PLAIN,28);
     private Thread jogo;
     private boolean jogo_Rodando;
     private BufferedImage Tela = new BufferedImage(LARG,ALT,BufferedImage.TYPE_INT_RGB);
-    private long startTime;
-    private long elapsed;
-    private boolean set1;
     private Board back;
     
     
@@ -47,10 +44,7 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
         g.dispose();
         Graphics2D g2d = (Graphics2D)getGraphics();
         g2d.drawImage(Tela,0,0,null);
-        g2d.dispose();
-        
-        
-        
+        g2d.dispose(); 
     }
     
     @Override
@@ -87,7 +81,6 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
             }catch(Exception e){
                 e.printStackTrace();
             }
-    
     //Fps Counter
     if(System.currentTimeMillis() - fpsTimer > 1000){
         System.out.printf("%d fps %d updates", fps,updates);
