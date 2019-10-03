@@ -47,6 +47,8 @@ public class Jogo extends JPanel implements KeyListener, Runnable{
         g2d.dispose(); 
     }
     
+    
+    //Mantem o jogo rodando a partir do calculo e uso de updates e fps.
     @Override
     public void run(){
         int fps = 0, updates = 0;

@@ -77,13 +77,30 @@ public class Board{
            
        }
     }
-    private void setHighScore(){
+    
+    private void resetHS(){//Reseta o highscore.
         FileWriter strWrite = null;
         try{
             File a = new File(saveHS,aName);
             strWrite = new FileWriter(a);
             BufferedWriter str = new BufferedWriter(strWrite);
-         
+            highScore = 0;
+              str.write("" + highScore);
+            
+            str.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private void setHighScore(){//Grava o highscore no arquivo.
+        FileWriter strWrite = null;
+        try{
+            File a = new File(saveHS,aName);
+            strWrite = new FileWriter(a);
+            BufferedWriter str = new BufferedWriter(strWrite);
               str.write("" + highScore);
             
             str.close();
@@ -104,7 +121,7 @@ public class Board{
       }
     }
     
-    private void printBoard(){
+    private void printBoard(){//Printa o tabuleiro.
         Graphics2D g = (Graphics2D)boardJ.getGraphics();
         g.setColor(Color.darkGray);
         g.fillRect(0,0,BOARD_LARG,BOARD_ALT);
@@ -119,7 +136,7 @@ public class Board{
         }
     }
     
-    public void start(){
+    public void start(){//Start o jogo com 2 blocos random.
         for(int i = 0;i < iBlocos;i++){
             bRandom();
         }
@@ -151,7 +168,7 @@ public class Board{
         
         
     
-    public void render(Graphics2D g){
+    public void render(Graphics2D g){//Printa o tabuleiro com todas as infos.
         Graphics2D g2d = (Graphics2D)endBoard.getGraphics();
         g2d.drawImage(boardJ,0,0,null);
         
@@ -181,7 +198,7 @@ public class Board{
     public void update(){
         checkKeys();
         
-        if(score >= highScore) highScore = score;
+        if(score >= highScore) highScore = score;//Seta HS.
         
         for(int line = 0;line<LINE;line++){
             for(int col = 0;col<COL;col++){
@@ -189,14 +206,14 @@ public class Board{
                   if(gerado == null)continue;
                   gerado.update();
                   resetPosicoes(gerado,line,col);
-                  if(gerado.getValor_blocos() == 2048){
+                  if(gerado.getValor_blocos() == 2048){//Checa se ganhou
                       winner = true;
                   }  
         }
     }
     }
     
-    public void reset(){
+    public void reset(){//Reseta o jogo.
 		board = new Bloco[LINE][COL];
 		start();
 		lose = false;
@@ -204,7 +221,7 @@ public class Board{
 		hasStarted = false;
                 score = 0;
 	}
-        public void gg(Graphics2D g){
+        public void gg(Graphics2D g){//Mensagem de Vitoria.
 		g.setColor(new Color(222,222,222));
 		g.fillRect(0, 0, Jogo.WIDTH, Jogo.HEIGHT);
 		g.setColor(Color.GREEN);
@@ -214,7 +231,7 @@ public class Board{
                 g.setFont(fScore);
                 g.drawString(r,180,80);            
         }
-    	public void fimDeJogoP(Graphics2D g) {
+    	public void fimDeJogoP(Graphics2D g) {//Mensagem de Derrota.
 		g.setColor(new Color(222,222,222));
 		g.fillRect(0, 0, Jogo.WIDTH, Jogo.HEIGHT);
 		g.setColor(Color.BLACK);
@@ -225,36 +242,36 @@ public class Board{
                 g.drawString(r,180,80);
         }
     
-    private void resetPosicoes(Bloco gerado,int line,int col){
-        if(gerado == null)return;
+    private void resetPosicoes(Bloco eBloco,int line,int col){//Faz os calculos para fazer slide no tabuleiro.
+        if(eBloco == null)return;
             int x = getBlocoX(col);
             int y = getBlocoY(line);
             
-            int distX = gerado.getX() - x; // Pega X do bloco
-            int distY = gerado.getY() - y; // Pega Y do bloco
+            int distX = eBloco.getX() - x; // Pega X do bloco
+            int distY = eBloco.getY() - y; // Pega Y do bloco
             
             if(Math.abs(distX) < Bloco.Slide){
-                gerado.setX(gerado.getX() - distX);//Tamanho do movimento do bloco em X
+                eBloco.setX(eBloco.getX() - distX);//Tamanho do movimento do bloco em X
             }
             if(Math.abs(distY) < Bloco.Slide){
-                gerado.setY(gerado.getY() - distY);//Tamanho do movimento do bloco em Y
+                eBloco.setY(eBloco.getY() - distY);//Tamanho do movimento do bloco em Y
             }            
             
             if(distX < 0){
-                gerado.setX(gerado.getX() + Bloco.Slide); //Movimento do bloco em slide
+                eBloco.setX(eBloco.getX() + Bloco.Slide); //Movimento do bloco em slide
             }
             if(distY < 0){
-                gerado.setY(gerado.getY() + Bloco.Slide);
+                eBloco.setY(eBloco.getY() + Bloco.Slide);
             }
             if(distX > 0){
-                gerado.setX(gerado.getX() - Bloco.Slide);
+                eBloco.setX(eBloco.getX() - Bloco.Slide);
             }
             if(distY > 0){
-                gerado.setY(gerado.getY() - Bloco.Slide);
+                eBloco.setY(eBloco.getY() - Bloco.Slide);
             }            
     }    
     
-    private boolean move(int line,int col,int hozirontalD,int verticalD,Lados lado){
+    private boolean move(int line,int col,int hozirontalD,int verticalD,Lados lado){//Funcao de move para os blocos.
         boolean pMove = false;
         Bloco gerado = board[line][col];
         if(gerado == null)return false;
@@ -288,7 +305,7 @@ public class Board{
         return pMove;
     }
     
-    private boolean checarLimites(Lados lado,int line,int col){
+    private boolean checarLimites(Lados lado,int line,int col){//Para onde deseja mover.
         if(lado == Lados.ESQUERDA){
             return col < 0;
         }
@@ -304,7 +321,7 @@ public class Board{
         return false;
     }
     
-    private void moveB(Lados lado){
+    private void moveB(Lados lado){//Realiza o movimento para os 4 lados possiveis usando outras funcoes ja criadas.
         boolean pMove = false;
         int horizontalD = 0;
         int verticalD = 0;
@@ -366,7 +383,7 @@ public class Board{
         }    
         
     }
-    private void checaPerdeu(){
+    private void checaPerdeu(){//Checa se perdeu e set HS.
         for(int line = 0;line<LINE;line++){
             for(int col = 0;col<COL;col++){
                 if(board[line][col] == null)return;
@@ -380,35 +397,35 @@ public class Board{
   
         
     }
-    private boolean checaEmVolta(int line,int col,Bloco gerado){
+    private boolean checaEmVolta(int line,int col,Bloco eBloco){
         if(line > 0){//Checa para cima
             Bloco aux = board[line - 1][col];
             if(aux == null)return true;
-            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+            if(eBloco.getValor_blocos() == aux.getValor_blocos())return true;
         }
         if(line < LINE - 1){//Checa para Baixo
             Bloco aux = board[line + 1][col];
             if(aux == null)return true;
-            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+            if(eBloco.getValor_blocos() == aux.getValor_blocos())return true;
         }
         if(col > 0){//Checa para Esquerda
             Bloco aux = board[line][col - 1];
             if(aux == null)return true;
-            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+            if(eBloco.getValor_blocos() == aux.getValor_blocos())return true;
         }
         if(col < COL - 1){//Checa para diretia
             Bloco aux = board[line][col + 1];
             if(aux == null)return true;
-            if(gerado.getValor_blocos() == aux.getValor_blocos())return true;
+            if(eBloco.getValor_blocos() == aux.getValor_blocos())return true;
         }  
         return false;
     }
     
-    private void iWin(int valor,int col,int line){
+    private void iWin(int valor,int col,int line){//Para spawnar um bloco qlqr.
         board[line][col] = new Bloco(valor,getBlocoX(col),getBlocoY(line));
     }
     
-    private void checkKeys(){
+    private void checkKeys(){//Controle do teclado.
         if(Controle.digita(KeyEvent.VK_LEFT)){//Move tudo
             moveB(Lados.ESQUERDA);
             if(!hasStarted)hasStarted = true;
@@ -448,6 +465,8 @@ public class Board{
         if(Controle.digita(KeyEvent.VK_R)){
             reset();
         }
-       
+        if(Controle.digita(KeyEvent.VK_H)){
+            resetHS();
+        }       
     }
 }

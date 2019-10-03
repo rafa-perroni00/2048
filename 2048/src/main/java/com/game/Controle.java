@@ -12,7 +12,7 @@ public class Controle {
     private Controle(){}
     //Dps de apertar a tecla e fazer a acao ele volta as teclas no estado 0
     public static void update(){
-        for(int i = 0;i < 10;i++){
+        for(int i = 0;i < 11;i++){
             if(i==0)semAcao[KeyEvent.VK_LEFT] = apertado[KeyEvent.VK_LEFT];
             if(i==1)semAcao[KeyEvent.VK_RIGHT] = apertado[KeyEvent.VK_RIGHT];
             if(i==2)semAcao[KeyEvent.VK_UP] = apertado[KeyEvent.VK_UP];
@@ -23,6 +23,7 @@ public class Controle {
             if(i==7)semAcao[KeyEvent.VK_S] = apertado[KeyEvent.VK_S];
             if(i==8)semAcao[KeyEvent.VK_V] = apertado[KeyEvent.VK_V];
             if(i==9)semAcao[KeyEvent.VK_R] = apertado[KeyEvent.VK_R];
+            if(i==10)semAcao[KeyEvent.VK_H] = apertado[KeyEvent.VK_H];
         }
     }
     

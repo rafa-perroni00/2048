@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
-
+//Metodo para alinhar a mensagem nos blocos e na tela.
 public class MetodosUteis {
     private MetodosUteis(){}
     

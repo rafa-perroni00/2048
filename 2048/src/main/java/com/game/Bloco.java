@@ -85,7 +85,7 @@ public class Bloco {
           }
           case 256:{
           fundo = new Color(255, 255, 102);
-          string = new Color(255,255,255);
+          string = new Color(0,0,0);
           break;
           }
           case 512:{
@@ -117,7 +117,7 @@ public class Bloco {
       
       g.setColor(string);
       
-      if(valor_blocos <= 64){
+      if(valor_blocos <= 64){//Centralizar a fonte do numero
           fonte = Jogo.main.deriveFont(36f);
       }
       else{
@@ -130,7 +130,7 @@ public class Bloco {
     g.drawString(""+valor_blocos,blocoX,blocoY);
     g.dispose();
     }
-	public void update() {
+	public void update() {//Funcao para animacao/Escalando o tamanho do bloco para fazer uma popada
             if (sAnimacao) {
                 AffineTransform transforma = new AffineTransform();//Alterar escala e formato do bloco
 		transforma.translate(LARG / 2 - tBloco * LARG / 2, ALT / 2 - tBloco * ALT / 2);
@@ -160,7 +160,7 @@ public class Bloco {
 	}    
  
 
-    public void render(Graphics2D g){
+    public void render(Graphics2D g){//Controle de quando deve haver animcao.
 	if(sAnimacao){
             g.drawImage(sBloco, x, y, null);
 	}
