@@ -84,7 +84,7 @@ public class Bloco {
           break;
           }
           case 256:{
-          fundo = new Color(246,232,115);
+          fundo = new Color(255, 255, 102);
           string = new Color(255,255,255);
           break;
           }

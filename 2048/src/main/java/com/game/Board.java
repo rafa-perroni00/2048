@@ -172,7 +172,9 @@ public class Board{
         g.drawString("HIGHSCORE: "+highScore,Jogo.LARG - MetodosUteis.getMensagemBlocoLarg("HIGHSCORE:"+highScore,fScore,g)-20,40);
         if(lose){
             fimDeJogoP(g);
-            //reset();
+        }
+        if(winner){
+            gg(g);
         }
     }
     
@@ -189,8 +191,6 @@ public class Board{
                   resetPosicoes(gerado,line,col);
                   if(gerado.getValor_blocos() == 2048){
                       winner = true;
-                      System.out.println("Win");
-                      reset();
                   }  
         }
     }
@@ -204,7 +204,16 @@ public class Board{
 		hasStarted = false;
                 score = 0;
 	}
-    
+        public void gg(Graphics2D g){
+		g.setColor(new Color(222,222,222));
+		g.fillRect(0, 0, Jogo.WIDTH, Jogo.HEIGHT);
+		g.setColor(Color.GREEN);
+		g.drawString("Voce Venceu!", Jogo.WIDTH / 2 - MetodosUteis.getMensagemBlocoLarg("Voce Venceu!",fim, g)/2 + 250, 300);
+                g.setColor(Color.BLACK);
+                g.setColor(Color.BLACK);
+                g.setFont(fScore);
+                g.drawString(r,180,80);            
+        }
     	public void fimDeJogoP(Graphics2D g) {
 		g.setColor(new Color(222,222,222));
 		g.fillRect(0, 0, Jogo.WIDTH, Jogo.HEIGHT);
@@ -232,7 +241,7 @@ public class Board{
             }            
             
             if(distX < 0){
-                gerado.setX(gerado.getX() + Bloco.Slide);
+                gerado.setX(gerado.getX() + Bloco.Slide); //Movimento do bloco em slide
             }
             if(distY < 0){
                 gerado.setY(gerado.getY() + Bloco.Slide);
@@ -269,7 +278,7 @@ public class Board{
                 board[newLINE - verticalD][newCOL - hozirontalD] = null;
                 board[newLINE][newCOL].setGoto(new Point(newLINE,newCOL));
                 board[newLINE][newCOL].setjAnimacao(true);//Chama animacao
-                score += board[newLINE][newCOL].getValor_blocos();
+                score += board[newLINE][newCOL].getValor_blocos();//Add score
             }
             else{
                 move = false;
@@ -368,7 +377,7 @@ public class Board{
             }
         lose = true;
         setHighScore();
-        //System.out.println("Voce Perdeu !!!");
+  
         
     }
     private boolean checaEmVolta(int line,int col,Bloco gerado){
